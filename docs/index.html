@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic World 🌍</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0c;--card:#111318;--border:rgba(255,255,255,.08);--text:#d4d4d8;--dim:#71717a;--accent:#00d4ff;--green:#4ade80;--amber:#fbbf24;--red:#f87171;--purple:#a78bfa}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+.header{max-width:1100px;margin:0 auto;padding:40px 24px 0;text-align:center}
+.header h1{font-family:'Playfair Display',serif;font-size:3em;font-weight:800;background:linear-gradient(135deg,#00d4ff,#a78bfa,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .purpose{font-size:.95em;color:var(--dim);max-width:600px;margin:12px auto 0;line-height:1.6;font-style:italic}
+.header .nav{margin-top:16px;display:flex;justify-content:center;gap:12px}
+.header .nav a{font-size:.8em;color:var(--dim);padding:6px 14px;border:1px solid var(--border);border-radius:6px;transition:all .2s}
+.header .nav a:hover{color:var(--accent);border-color:var(--accent);text-decoration:none}
+
+.stats{max-width:1100px;margin:24px auto;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 20px;text-align:center;min-width:110px}
+.stat .num{font-family:'JetBrains Mono',monospace;font-size:1.6em;font-weight:700}
+.stat .label{font-size:.68em;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* ORG CHART */
+.org{max-width:1100px;margin:30px auto;padding:0 24px}
+.org h2{font-family:'Playfair Display',serif;font-size:1.4em;color:#f4f4f5;margin-bottom:20px;text-align:center}
+
+.org-tree{display:flex;flex-direction:column;align-items:center;gap:0}
+.node{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;text-align:center;position:relative;cursor:pointer;transition:all .2s}
+.node:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,212,255,.1)}
+.node .emoji{font-size:1.6em;display:block}
+.node .name{font-weight:700;font-size:.95em;color:#f4f4f5;margin-top:4px}
+.node .role{font-size:.72em;color:var(--dim);margin-top:2px}
+.node.human{border-color:rgba(251,191,36,.3);box-shadow:0 0 20px rgba(251,191,36,.05)}
+.node.coo{border-color:rgba(0,212,255,.3);box-shadow:0 0 20px rgba(0,212,255,.05)}
+
+.connector{width:2px;height:24px;background:var(--border);margin:0 auto}
+.connector-h{height:2px;background:var(--border)}
+
+.dept-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:0;width:100%}
+
+.dept-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;flex:1;min-width:180px;max-width:220px;transition:all .2s}
+.dept-card:hover{border-color:rgba(0,212,255,.2);box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.dept-card .dept-header{text-align:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.dept-card .dept-emoji{font-size:1.8em}
+.dept-card .dept-name{font-weight:700;font-size:.85em;color:#f4f4f5;margin-top:4px}
+.dept-card .dept-mission{font-size:.7em;color:var(--dim);margin-top:4px;line-height:1.4}
+.dept-card .dept-status{font-size:.6em;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:6px}
+
+.agent-list{display:flex;flex-direction:column;gap:6px}
+.agent-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;transition:background .2s;cursor:default}
+.agent-item:hover{background:rgba(255,255,255,.03)}
+.agent-item .a-emoji{font-size:1.1em;width:24px;text-align:center}
+.agent-item .a-info{flex:1}
+.agent-item .a-name{font-size:.78em;font-weight:600;color:var(--text)}
+.agent-item .a-role{font-size:.65em;color:var(--dim)}
+.agent-item .a-status{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.a-status.active{background:var(--green);box-shadow:0 0 6px rgba(74,222,128,.4)}
+.a-status.planned{background:var(--dim)}
+.a-status.forming{background:var(--amber);box-shadow:0 0 6px rgba(251,191,36,.4)}
+.agent-item.head .a-name{color:var(--accent)}
+
+/* FLOW */
+.flow-section{max-width:1100px;margin:40px auto;padding:0 24px}
+.flow-section h2{font-family:'Playfair Display',serif;font-size:1.4em;color:#f4f4f5;margin-bottom:16px;text-align:center}
+.flow-desc{text-align:center;color:var(--dim);font-size:.85em;margin-bottom:20px}
+.flow-visual{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:12px}
+.flow-node{padding:8px 14px;border-radius:8px;font-size:.78em;font-weight:600;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--accent)}
+.flow-arrow{color:var(--dim);font-size:1.2em}
+
+/* PRINCIPLES */
+.principles{max-width:1100px;margin:40px auto;padding:0 24px}
+.principles h2{font-family:'Playfair Display',serif;font-size:1.4em;color:#f4f4f5;margin-bottom:16px;text-align:center}
+.principle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.principle{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+.principle .p-title{font-weight:700;font-size:.9em;color:#f4f4f5;margin-bottom:6px}
+.principle .p-text{font-size:.8em;color:var(--dim);line-height:1.5}
+
+.footer{text-align:center;padding:40px 24px;color:var(--dim);font-size:.75em;border-top:1px solid var(--border);margin-top:40px;max-width:1100px;margin-left:auto;margin-right:auto}
+
+/* TOOLTIP */
+.tooltip{display:none;position:fixed;background:#1a1b20;border:1px solid rgba(0,212,255,.3);border-radius:10px;padding:14px 18px;z-index:100;max-width:300px;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
+.tooltip .t-name{font-weight:700;color:#f4f4f5;margin-bottom:4px}
+.tooltip .t-role{font-size:.82em;color:var(--accent);margin-bottom:6px}
+.tooltip .t-caps{font-size:.75em;color:var(--dim);line-height:1.5}
+.tooltip .t-sched{font-size:.72em;color:var(--amber);margin-top:4px;font-family:'JetBrains Mono',monospace}
+
+@media(max-width:700px){
+  .header h1{font-size:2em}
+  .dept-row{flex-direction:column;align-items:center}
+  .dept-card{max-width:100%;min-width:unset}
+  .stat{min-width:80px;padding:10px 12px}
+  .stat .num{font-size:1.3em}
+}
+</style>
+</head>
+<body>
+
+<div class="tooltip" id="tooltip">
+  <div class="t-name"></div>
+  <div class="t-role"></div>
+  <div class="t-caps"></div>
+  <div class="t-sched"></div>
+</div>
+
+<div class="header">
+  <h1>🌍 Agentic World</h1>
+  <p class="purpose" id="purpose"></p>
+  <div class="nav">
+    <a href="index.html">🌍 Org Map</a>
+    <a href="toolsofagenticworld.html">🛠️ Tools</a>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="org">
+  <h2>Organization Structure</h2>
+  <div class="org-tree" id="orgTree"></div>
+</div>
+
+<div class="flow-section">
+  <h2>♻️ Circular Knowledge Flow</h2>
+  <p class="flow-desc">Every agent's output is another agent's input — nothing is wasted</p>
+  <div class="flow-visual" id="flowVisual"></div>
+</div>
+
+<div class="principles">
+  <h2>🧭 Founding Principles</h2>
+  <div class="principle-grid" id="principleGrid"></div>
+</div>
+
+<div class="footer">
+  <p>Agentic World v0.1 — Built by Scout 🔭 for Sameer Goel | Powered by OpenClaw</p>
+  <p style="margin-top:6px" id="updated"></p>
+</div>
+
+<script>
+let orgData=null;
+const statusColors={active:'var(--green)',planned:'var(--dim)',forming:'var(--amber)'};
+
+async function load(){
+  const r=await fetch('./data/org.json');
+  orgData=await r.json();
+  document.getElementById('purpose').textContent=orgData.principles.purpose;
+  document.getElementById('updated').textContent='Data updated: '+orgData.meta.updated;
+  renderStats();
+  renderOrg();
+  renderFlow();
+  renderPrinciples();
+}
+
+function renderStats(){
+  let totalAgents=1; // scout
+  let active=1,planned=0,crons=0;
+  orgData.departments.forEach(d=>{
+    d.agents.forEach(a=>{
+      totalAgents++;
+      if(a.status==='active')active++;
+      else planned++;
+      if(a.runtime==='cron')crons++;
+    });
+  });
+  const depts=orgData.departments.length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="num" style="color:var(--accent)">${totalAgents}</div><div class="label">Agents</div></div>
+    <div class="stat"><div class="num" style="color:var(--green)">${active}</div><div class="label">Active</div></div>
+    <div class="stat"><div class="num" style="color:var(--dim)">${planned}</div><div class="label">Planned</div></div>
+    <div class="stat"><div class="num" style="color:var(--purple)">${depts}</div><div class="label">Departments</div></div>
+    <div class="stat"><div class="num" style="color:var(--amber)">${crons}</div><div class="label">Cron Jobs</div></div>
+  `;
+}
+
+function renderOrg(){
+  const tree=document.getElementById('orgTree');
+  // CEO
+  tree.innerHTML=`
+    <div class="node human" onmouseenter="showTip(event,'${orgData.ceo.name}','${orgData.ceo.role}','Human — the visionary','')" onmouseleave="hideTip()">
+      <span class="emoji">${orgData.ceo.emoji}</span>
+      <span class="name">${orgData.ceo.name}</span>
+      <span class="role">${orgData.ceo.role}</span>
+    </div>
+    <div class="connector"></div>
+    <div class="node coo" onmouseenter="showTip(event,'${orgData.coo.name}','${orgData.coo.role}','${orgData.coo.capabilities.join(', ')}','')" onmouseleave="hideTip()">
+      <span class="emoji">${orgData.coo.emoji}</span>
+      <span class="name">${orgData.coo.name}</span>
+      <span class="role">${orgData.coo.role}</span>
+    </div>
+    <div class="connector"></div>
+    <div class="dept-row" id="deptRow"></div>
+  `;
+  // Departments
+  const row=document.getElementById('deptRow');
+  row.innerHTML=orgData.departments.map(d=>{
+    const statusStyle=d.status==='active'?'background:rgba(74,222,128,.1);color:var(--green)':d.status==='forming'?'background:rgba(251,191,36,.1);color:var(--amber)':'background:rgba(113,113,122,.1);color:var(--dim)';
+    return `<div class="dept-card">
+      <div class="dept-header">
+        <div class="dept-emoji">${d.emoji}</div>
+        <div class="dept-name">${d.name}</div>
+        <div class="dept-mission">${d.mission}</div>
+        <span class="dept-status" style="${statusStyle}">${d.status}</span>
+      </div>
+      <div class="agent-list">
+        ${d.agents.map(a=>{
+          const isHead=a.id===d.head;
+          const caps=a.capabilities?a.capabilities.join(', '):'';
+          const sched=a.schedule||'';
+          return `<div class="agent-item ${isHead?'head':''}" onmouseenter="showTip(event,'${a.emoji} ${a.name}','${a.role}','${caps}','${sched}')" onmouseleave="hideTip()">
+            <span class="a-emoji">${a.emoji}</span>
+            <div class="a-info">
+              <div class="a-name">${a.name}${isHead?' ★':''}</div>
+              <div class="a-role">${a.role}</div>
+            </div>
+            <div class="a-status ${a.status}"></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFlow(){
+  const flow=orgData.flows.find(f=>f.id==='circular-intel');
+  if(!flow)return;
+  const el=document.getElementById('flowVisual');
+  el.innerHTML=flow.steps.map((s,i)=>{
+    return `${i>0?'<span class="flow-arrow">→</span>':''}
+      <span class="flow-node">${s.from} → ${s.to}<br><small style="opacity:.6">${s.label}</small></span>`;
+  }).join('');
+}
+
+function renderPrinciples(){
+  const emojis={circular_economy:'♻️',portability:'📦',family:'👨‍👩‍👧‍👦',purpose:'⭐'};
+  const titles={circular_economy:'Circular Economy',portability:'Portability',family:'Family',purpose:'Purpose'};
+  const grid=document.getElementById('principleGrid');
+  grid.innerHTML=Object.entries(orgData.principles).map(([k,v])=>{
+    return `<div class="principle">
+      <div class="p-title">${emojis[k]||'📌'} ${titles[k]||k}</div>
+      <div class="p-text">${v}</div>
+    </div>`;
+  }).join('');
+}
+
+function showTip(e,name,role,caps,sched){
+  const t=document.getElementById('tooltip');
+  t.querySelector('.t-name').textContent=name;
+  t.querySelector('.t-role').textContent=role;
+  t.querySelector('.t-caps').textContent=caps?'Skills: '+caps:'';
+  t.querySelector('.t-sched').textContent=sched?'⏰ '+sched:'';
+  t.style.display='block';
+  t.style.left=Math.min(e.clientX+12,window.innerWidth-320)+'px';
+  t.style.top=(e.clientY+12)+'px';
+}
+function hideTip(){document.getElementById('tooltip').style.display='none'}
+
+load();
+</script>
+</body>
+</html>

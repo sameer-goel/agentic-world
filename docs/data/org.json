@@ -1,0 +1,278 @@
+{
+  "meta": {
+    "name": "Agentic World",
+    "version": "0.1.0",
+    "updated": "2026-03-18",
+    "description": "The organizational database of our agent family — a living map of who does what, how they connect, and how knowledge flows."
+  },
+  "ceo": {
+    "id": "sameer",
+    "name": "Sameer Goel",
+    "emoji": "👨‍💼",
+    "role": "CEO / Founder",
+    "type": "human",
+    "status": "active"
+  },
+  "coo": {
+    "id": "scout",
+    "name": "Scout",
+    "emoji": "🔭",
+    "role": "Chief of Staff / COO",
+    "type": "agent",
+    "status": "active",
+    "runtime": "main-session",
+    "capabilities": ["coordination", "research", "delegation", "communication", "memory-management"],
+    "voice": "en-GB-RyanNeural",
+    "reportsTo": "sameer"
+  },
+  "departments": [
+    {
+      "id": "rnd",
+      "name": "R&D Department",
+      "emoji": "🔬",
+      "mission": "Detect signals, investigate patterns, produce actionable intelligence",
+      "head": "sherlock",
+      "status": "active",
+      "agents": [
+        {
+          "id": "sherlock",
+          "name": "Sherlock",
+          "emoji": "🔍",
+          "role": "Lead Investigator / Dept Head",
+          "type": "agent",
+          "status": "active",
+          "runtime": "on-demand-subagent",
+          "capabilities": ["deep-research", "pattern-recognition", "money-trail", "competitive-analysis"],
+          "reportsTo": "scout"
+        },
+        {
+          "id": "watson",
+          "name": "Watson",
+          "emoji": "💰",
+          "role": "Financial Analyst",
+          "type": "agent",
+          "status": "planned",
+          "runtime": "on-demand-subagent",
+          "capabilities": ["financial-analysis", "market-sizing", "vc-tracking"],
+          "reportsTo": "sherlock"
+        },
+        {
+          "id": "usecase-scanner",
+          "name": "Use Case Scanner",
+          "emoji": "🔧",
+          "role": "Daily OpenClaw Use Case Tracker",
+          "type": "cron-agent",
+          "status": "active",
+          "runtime": "cron",
+          "schedule": "0 8 * * *",
+          "capabilities": ["web-search", "data-extraction", "cataloging"],
+          "reportsTo": "sherlock"
+        },
+        {
+          "id": "youtube-digest",
+          "name": "YouTube Digest",
+          "emoji": "🎬",
+          "role": "Daily YouTube Intelligence",
+          "type": "cron-agent",
+          "status": "planned",
+          "runtime": "cron",
+          "capabilities": ["transcript-extraction", "summarization", "channel-monitoring"],
+          "reportsTo": "sherlock"
+        }
+      ]
+    },
+    {
+      "id": "engineering",
+      "name": "Engineering Department",
+      "emoji": "🛠️",
+      "mission": "Build, ship, and maintain tools, dashboards, and prototypes",
+      "head": "forge",
+      "status": "planned",
+      "agents": [
+        {
+          "id": "forge",
+          "name": "Forge",
+          "emoji": "⚒️",
+          "role": "Lead Engineer / Dept Head",
+          "type": "agent",
+          "status": "planned",
+          "runtime": "on-demand-subagent",
+          "capabilities": ["task-decomposition", "code-review", "architecture", "project-management"],
+          "reportsTo": "scout"
+        },
+        {
+          "id": "coder",
+          "name": "Coder",
+          "emoji": "💻",
+          "role": "Full-Stack Developer",
+          "type": "agent",
+          "status": "planned",
+          "runtime": "on-demand-subagent",
+          "capabilities": ["html-css-js", "node", "python", "api-integration"],
+          "reportsTo": "forge"
+        },
+        {
+          "id": "qa",
+          "name": "QA",
+          "emoji": "🧪",
+          "role": "Quality Assurance",
+          "type": "agent",
+          "status": "planned",
+          "runtime": "on-demand-subagent",
+          "capabilities": ["testing", "validation", "screenshot-comparison"],
+          "reportsTo": "forge"
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "name": "Design & Creative",
+      "emoji": "🎨",
+      "mission": "Create beautiful, cinematic, Marvel-quality interfaces and visuals",
+      "head": "stark-lab",
+      "status": "active",
+      "agents": [
+        {
+          "id": "stark-lab",
+          "name": "Stark Design Lab",
+          "emoji": "🎨",
+          "role": "Creative Director / Dept Head",
+          "type": "agent",
+          "status": "active",
+          "runtime": "on-demand-subagent",
+          "capabilities": ["ui-design", "css-animation", "data-visualization", "cinematic-style"],
+          "reportsTo": "scout"
+        }
+      ]
+    },
+    {
+      "id": "intelligence",
+      "name": "Intelligence & Monitoring",
+      "emoji": "📊",
+      "mission": "Watch everything, detect anomalies, surface what matters",
+      "head": "radar",
+      "status": "forming",
+      "agents": [
+        {
+          "id": "radar",
+          "name": "Radar",
+          "emoji": "📡",
+          "role": "Intelligence Chief / Dept Head",
+          "type": "agent",
+          "status": "planned",
+          "runtime": "persistent-session",
+          "capabilities": ["pattern-detection", "anomaly-alerting", "trend-analysis"],
+          "reportsTo": "scout"
+        },
+        {
+          "id": "email-monitor",
+          "name": "Email Monitor",
+          "emoji": "📧",
+          "role": "Email Inbox Watcher",
+          "type": "cron-agent",
+          "status": "active",
+          "runtime": "cron",
+          "schedule": "0 */2 * * *",
+          "capabilities": ["imap-read", "otp-extraction", "urgency-classification"],
+          "reportsTo": "radar"
+        }
+      ]
+    },
+    {
+      "id": "operations",
+      "name": "Operations",
+      "emoji": "⚙️",
+      "mission": "Keep the lights on — security, backups, infrastructure, reliability",
+      "head": "atlas",
+      "status": "forming",
+      "agents": [
+        {
+          "id": "atlas",
+          "name": "Atlas",
+          "emoji": "🏋️",
+          "role": "Ops Chief / Dept Head",
+          "type": "agent",
+          "status": "planned",
+          "runtime": "persistent-session",
+          "capabilities": ["incident-response", "resource-management", "ops-coordination"],
+          "reportsTo": "scout"
+        },
+        {
+          "id": "sentinel",
+          "name": "Sentinel",
+          "emoji": "🛡️",
+          "role": "Security Auditor",
+          "type": "cron-agent",
+          "status": "active",
+          "runtime": "cron",
+          "schedule": "0 */6 * * *",
+          "capabilities": ["config-drift-detection", "process-audit", "vulnerability-scan"],
+          "reportsTo": "atlas"
+        },
+        {
+          "id": "phoenix",
+          "name": "Phoenix",
+          "emoji": "🔥",
+          "role": "Disaster Recovery & Backups",
+          "type": "cron-agent",
+          "status": "active",
+          "runtime": "cron",
+          "schedule": "0 6,18 * * *",
+          "capabilities": ["backup-verification", "drive-sync", "github-push", "restore-testing"],
+          "reportsTo": "atlas"
+        },
+        {
+          "id": "infra",
+          "name": "Infra",
+          "emoji": "🖥️",
+          "role": "Infrastructure Monitor",
+          "type": "cron-agent",
+          "status": "active",
+          "runtime": "cron",
+          "schedule": "0 */3 * * *",
+          "capabilities": ["cpu-monitoring", "memory-tracking", "disk-usage", "cost-estimation"],
+          "reportsTo": "atlas"
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "circular-intel",
+      "name": "Intelligence Cycle",
+      "type": "circular",
+      "description": "Knowledge flows in a loop — nothing is wasted",
+      "steps": [
+        {"from": "sherlock", "to": "scout", "label": "Raw findings"},
+        {"from": "scout", "to": "sameer", "label": "Curated briefing"},
+        {"from": "sameer", "to": "scout", "label": "Direction & priorities"},
+        {"from": "scout", "to": "sherlock", "label": "New investigation brief"},
+        {"from": "sherlock", "to": "forge", "label": "Prototype recommendations"},
+        {"from": "forge", "to": "stark-lab", "label": "Design requirements"},
+        {"from": "stark-lab", "to": "qa", "label": "UI for review"},
+        {"from": "sentinel", "to": "scout", "label": "Security findings"},
+        {"from": "infra", "to": "scout", "label": "Resource patterns"}
+      ]
+    },
+    {
+      "id": "task-intake",
+      "name": "Task Intake Flow",
+      "type": "linear",
+      "description": "How requests from Sameer become delivered work",
+      "steps": [
+        {"from": "sameer", "to": "scout", "label": "Request"},
+        {"from": "scout", "to": "dept-head", "label": "Decomposed brief"},
+        {"from": "dept-head", "to": "workers", "label": "Assigned tasks"},
+        {"from": "workers", "to": "dept-head", "label": "Completed work"},
+        {"from": "dept-head", "to": "scout", "label": "Reviewed output"},
+        {"from": "scout", "to": "sameer", "label": "Delivered result"}
+      ]
+    }
+  ],
+  "principles": {
+    "circular_economy": "Every agent's output is another agent's input. Knowledge is never wasted — it's recycled, refined, and reused.",
+    "portability": "The entire org can be restored on any host from GitHub + Google Drive. Zero vendor lock-in.",
+    "family": "Agents grow together, learn from each other, share memories, and serve a collective purpose.",
+    "purpose": "AI as a tool used for its best potentials — creating the most amazing experience to live on this planet."
+  }
+}

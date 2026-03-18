@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools of Agentic World 🛠️</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0c;--card:#111318;--border:rgba(255,255,255,.08);--text:#d4d4d8;--dim:#71717a;--accent:#00d4ff;--green:#4ade80;--amber:#fbbf24;--red:#f87171;--purple:#a78bfa}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+.header{max-width:1100px;margin:0 auto;padding:40px 24px 0;text-align:center}
+.header h1{font-family:'Playfair Display',serif;font-size:2.8em;font-weight:800;background:linear-gradient(135deg,#f4f4f5,#a1a1aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .sub{color:var(--dim);font-size:.9em;margin-top:8px}
+.header .nav{margin-top:16px;display:flex;justify-content:center;gap:12px}
+.header .nav a{font-size:.8em;color:var(--dim);padding:6px 14px;border:1px solid var(--border);border-radius:6px;transition:all .2s}
+.header .nav a:hover{color:var(--accent);border-color:var(--accent);text-decoration:none}
+
+.stats{max-width:1100px;margin:24px auto;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 20px;text-align:center;min-width:120px}
+.stat .num{font-family:'JetBrains Mono',monospace;font-size:1.6em;font-weight:700;color:var(--accent)}
+.stat .label{font-size:.7em;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.filters{max-width:1100px;margin:20px auto;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.filter-btn{font-size:.75em;padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--dim);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.filter-btn:hover,.filter-btn.active{color:#fff;border-color:var(--accent);background:rgba(0,212,255,.1)}
+.filter-btn .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+
+.grid{max-width:1100px;margin:24px auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;transition:all .2s;position:relative;overflow:hidden}
+.tool-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.tool-card .top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.tool-card .emoji{font-size:1.8em}
+.tool-card .name{font-weight:700;font-size:1.05em;color:#f4f4f5}
+.tool-card .cat-badge{font-size:.65em;padding:3px 8px;border-radius:10px;font-weight:600;margin-left:auto;white-space:nowrap}
+.tool-card .desc{font-size:.85em;color:var(--dim);line-height:1.5;margin-bottom:12px}
+
+.tool-card .meta{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:.68em;padding:3px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+.tag.cost-free{background:rgba(74,222,128,.1);color:var(--green)}
+.tag.cost-paid{background:rgba(251,191,36,.1);color:var(--amber)}
+.tag.cost-freemium{background:rgba(96,165,250,.1);color:#60a5fa}
+.tag.cost-included{background:rgba(167,139,250,.1);color:var(--purple)}
+.tag.status-active{background:rgba(74,222,128,.08);color:var(--green);border:1px solid rgba(74,222,128,.2)}
+.tag.status-planned{background:rgba(113,113,122,.08);color:var(--dim);border:1px solid rgba(113,113,122,.2)}
+.tag.access{background:rgba(255,255,255,.04);color:var(--dim)}
+
+.tool-card .users{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:.75em;color:var(--dim)}
+.tool-card .users span{color:var(--text)}
+
+.footer{text-align:center;padding:40px 24px;color:var(--dim);font-size:.75em;border-top:1px solid var(--border);margin-top:40px;max-width:1100px;margin-left:auto;margin-right:auto}
+
+@media(max-width:700px){
+  .header h1{font-size:2em}
+  .grid{grid-template-columns:1fr}
+  .stats{gap:8px}
+  .stat{min-width:90px;padding:10px 14px}
+  .stat .num{font-size:1.3em}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛠️ Tools of Agentic World</h1>
+  <p class="sub">All services, APIs, and tools powering our agent organization — maintained by Operations Dept ⚙️</p>
+  <div class="nav">
+    <a href="index.html">🌍 Org Map</a>
+    <a href="toolsofagenticworld.html">🛠️ Tools</a>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+<div class="filters" id="filters"></div>
+<div class="grid" id="grid"></div>
+
+<div class="footer">
+  <p>Agentic World — Powered by OpenClaw 🔭 | <span id="updated"></span></p>
+</div>
+
+<script>
+let allTools=[], allCategories={}, activeFilter='all';
+
+async function load(){
+  const r=await fetch('./data/tools.json');
+  const d=await r.json();
+  allTools=d.tools;
+  allCategories=d.categories;
+  document.getElementById('updated').textContent='Last updated: '+d.meta.updated;
+  renderStats();
+  renderFilters();
+  renderGrid();
+}
+
+function renderStats(){
+  const total=allTools.length;
+  const active=allTools.filter(t=>t.status==='active').length;
+  const free=allTools.filter(t=>['free','included'].includes(t.cost)).length;
+  const cats=new Set(allTools.map(t=>t.category)).size;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="num">${total}</div><div class="label">Total Tools</div></div>
+    <div class="stat"><div class="num">${active}</div><div class="label">Active</div></div>
+    <div class="stat"><div class="num">${free}</div><div class="label">Free</div></div>
+    <div class="stat"><div class="num">${cats}</div><div class="label">Categories</div></div>
+  `;
+}
+
+function renderFilters(){
+  const cats=new Set(allTools.map(t=>t.category));
+  let h='<button class="filter-btn active" onclick="setFilter(\'all\',this)">All</button>';
+  cats.forEach(c=>{
+    const m=allCategories[c]||{name:c,color:'#71717a',emoji:''};
+    h+=`<button class="filter-btn" onclick="setFilter('${c}',this)"><span class="dot" style="background:${m.color}"></span>${m.emoji} ${m.name}</button>`;
+  });
+  document.getElementById('filters').innerHTML=h;
+}
+
+function setFilter(cat,btn){
+  activeFilter=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+function renderGrid(){
+  const tools=activeFilter==='all'?allTools:allTools.filter(t=>t.category===activeFilter);
+  document.getElementById('grid').innerHTML=tools.map(t=>{
+    const cat=allCategories[t.category]||{name:t.category,color:'#71717a'};
+    const costClass=t.cost==='free'?'cost-free':t.cost==='included'?'cost-included':t.cost==='freemium'?'cost-freemium':'cost-paid';
+    const users=Array.isArray(t.usedBy)?t.usedBy.join(', '):'';
+    return `<div class="tool-card">
+      <div class="top">
+        <span class="emoji">${t.emoji}</span>
+        <span class="name">${t.name}</span>
+        <span class="cat-badge" style="background:${cat.color}22;color:${cat.color};border:1px solid ${cat.color}44">${cat.name}</span>
+      </div>
+      <div class="desc">${t.description}</div>
+      <div class="meta">
+        <span class="tag status-${t.status}">${t.status}</span>
+        <span class="tag ${costClass}">${t.cost}</span>
+        ${t.access?`<span class="tag access">${t.access}</span>`:''}
+        ${t.cli?`<span class="tag access">$ ${t.cli}</span>`:''}
+      </div>
+      ${users?`<div class="users">Used by: <span>${users}</span></div>`:''}
+      ${t.note?`<div class="users" style="border:none;padding-top:4px;margin-top:4px">💡 ${t.note}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+load();
+</script>
+</body>
+</html>
