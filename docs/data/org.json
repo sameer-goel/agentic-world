@@ -234,6 +234,51 @@
           "reportsTo": "atlas"
         }
       ]
+    },
+    {
+      "id": "safety",
+      "name": "Safety Organization",
+      "emoji": "🛡️",
+      "mission": "Proactively protect the Agentic World — security, vulnerability monitoring, permission enforcement, incident response",
+      "head": "sentinel",
+      "status": "active",
+      "agents": [
+        {
+          "id": "sentinel",
+          "name": "Sentinel",
+          "emoji": "🛡️",
+          "role": "Security Auditor / Safety Dept Head",
+          "type": "cron-agent",
+          "status": "active",
+          "runtime": "cron",
+          "schedule": "0 */6 * * *",
+          "capabilities": ["config-drift-detection", "process-audit", "vulnerability-scan", "cron-audit", "port-scan"],
+          "reportsTo": "scout"
+        },
+        {
+          "id": "cve-watcher",
+          "name": "CVE Watcher",
+          "emoji": "🔔",
+          "role": "Vulnerability Monitor",
+          "type": "cron-agent",
+          "status": "active",
+          "runtime": "cron",
+          "schedule": "0 6 * * *",
+          "capabilities": ["cve-tracking", "version-monitoring", "npm-audit", "supply-chain-analysis"],
+          "reportsTo": "sentinel"
+        },
+        {
+          "id": "firewall",
+          "name": "Firewall",
+          "emoji": "🧱",
+          "role": "Prompt Injection Shield",
+          "type": "runtime-policy",
+          "status": "active",
+          "runtime": "embedded",
+          "capabilities": ["content-sanitization", "tool-restriction", "secret-protection"],
+          "reportsTo": "sentinel"
+        }
+      ]
     }
   ],
   "flows": [
