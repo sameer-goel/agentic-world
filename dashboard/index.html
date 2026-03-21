@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scout Mission Control</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🔭</span>
+            <span class="logo-text">Scout Control</span>
+        </div>
+        <ul class="nav-links">
+            <li class="active"><a href="index.html"><span>📊</span> Overview</a></li>
+            <li><a href="agents.html"><span>🤖</span> Agents</a></li>
+            <li><a href="cron.html"><span>⏰</span> Cron Jobs</a></li>
+            <li><a href="system.html"><span>🖥️</span> System</a></li>
+            <li><a href="about.html"><span>ℹ️</span> About</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span>All Systems Operational</span>
+            </div>
+            <div class="last-updated" id="lastUpdated">Updated: --</div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1>Mission Control</h1>
+                <p>Real-time operational intelligence for the Agentic World</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" id="refreshBtn">
+                    <span>🔄</span> Refresh
+                </button>
+                <div class="auto-refresh">
+                    <label class="switch">
+                        <input type="checkbox" id="autoRefresh" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Auto-refresh (30s)</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Quick Stats -->
+            <div class="card stat-card">
+                <div class="stat-icon">🤖</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalAgents">--</div>
+                    <div class="stat-label">Total Agents</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="activeCrons">--</div>
+                    <div class="stat-label">Active Cron Jobs</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">🔧</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalTools">--</div>
+                    <div class="stat-label">Tools & Services</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">💾</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="diskUsage">93%</div>
+                    <div class="stat-label">Disk Usage</div>
+                </div>
+            </div>
+
+            <!-- Agent Status Overview -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>🔭 Chief of Staff</h2>
+                    <span class="badge success">Active</span>
+                </div>
+                <div class="card-content">
+                    <div class="agent-profile">
+                        <div class="agent-avatar">🔭</div>
+                        <div class="agent-info">
+                            <h3>Scout</h3>
+                            <p class="agent-role">Chief of Staff / Head of Agents / R&D Advisor</p>
+                            <div class="agent-meta">
+                                <span class="meta-item"><strong>Runtime:</strong> main-session</span>
+                                <span class="meta-item"><strong>Model:</strong> Claude Sonnet 4.5</span>
+                                <span class="meta-item"><strong>Voice:</strong> en-GB-RyanNeural</span>
+                            </div>
+                            <div class="capabilities">
+                                <span class="capability-tag">Coordination</span>
+                                <span class="capability-tag">Research</span>
+                                <span class="capability-tag">Delegation</span>
+                                <span class="capability-tag">Communication</span>
+                                <span class="capability-tag">Memory Management</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Department Overview -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>🏢 Departments</h2>
+                    <input type="text" class="search-box" placeholder="Search departments..." id="deptSearch">
+                </div>
+                <div class="card-content">
+                    <div id="departmentsList" class="departments-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>📈 Recent Activity</h2>
+                </div>
+                <div class="card-content">
+                    <div class="timeline" id="activityTimeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-time">Just now</div>
+                                <div class="timeline-text">Dashboard loaded</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Health -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>💚 System Health</h2>
+                </div>
+                <div class="card-content">
+                    <div class="health-metrics">
+                        <div class="health-item">
+                            <div class="health-label">OpenClaw Runtime</div>
+                            <div class="health-status">
+                                <span class="status-dot active"></span>
+                                <span>Operational</span>
+                            </div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-label">GitHub Connectivity</div>
+                            <div class="health-status">
+                                <span class="status-dot active"></span>
+                                <span>Connected</span>
+                            </div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-label">Google Drive Backup</div>
+                            <div class="health-status">
+                                <span class="status-dot active"></span>
+                                <span>Synced</span>
+                            </div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-label">Security Monitoring</div>
+                            <div class="health-status">
+                                <span class="status-dot active"></span>
+                                <span>Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🔗 Quick Links</h2>
+                </div>
+                <div class="card-content">
+                    <div class="quick-links">
+                        <a href="https://sameer-goel.github.io/smart-intel/" class="quick-link" target="_blank">
+                            <span>📊</span> Smart Intel
+                        </a>
+                        <a href="https://sameer-goel.github.io/web4agents/" class="quick-link" target="_blank">
+                            <span>🌐</span> Web4Agents
+                        </a>
+                        <a href="https://sameer-goel.github.io/claw-dots/" class="quick-link" target="_blank">
+                            <span>🧩</span> Claw Dots
+                        </a>
+                        <a href="https://github.com/sameer-goel" class="quick-link" target="_blank">
+                            <span>🐙</span> GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

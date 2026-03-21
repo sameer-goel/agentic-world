@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Scout Mission Control</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🔭</span>
+            <span class="logo-text">Scout Control</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><span>📊</span> Overview</a></li>
+            <li><a href="agents.html"><span>🤖</span> Agents</a></li>
+            <li><a href="cron.html"><span>⏰</span> Cron Jobs</a></li>
+            <li><a href="system.html"><span>🖥️</span> System</a></li>
+            <li class="active"><a href="about.html"><span>ℹ️</span> About</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span>All Systems Operational</span>
+            </div>
+            <div class="last-updated" id="lastUpdated">Updated: --</div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1>ℹ️ About This Dashboard</h1>
+                <p>Mission Control for the Agentic World</p>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- What is This -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>🔭 What is Scout Mission Control?</h2>
+                </div>
+                <div class="card-content">
+                    <p style="margin-bottom: 16px; line-height: 1.8;">
+                        Scout Mission Control is a real-time operational intelligence dashboard for the <strong>Agentic World</strong> — 
+                        a family of AI agents working together under the leadership of Scout, the Chief of Staff.
+                    </p>
+                    <p style="line-height: 1.8;">
+                        This dashboard provides complete visibility into agent organization, scheduled tasks, system health, 
+                        and operational metrics. It's designed to be beautiful, fast, and informative — think Vercel, Linear, 
+                        and Arc Browser quality UX.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>✨ Features</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                        <div style="padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 8px;">🤖</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Agent Hierarchy</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                Complete org chart with roles, capabilities, and status
+                            </div>
+                        </div>
+                        <div style="padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 8px;">⏰</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Cron Monitoring</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                Track scheduled jobs, execution times, and health
+                            </div>
+                        </div>
+                        <div style="padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 8px;">🖥️</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">System Health</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                CPU, memory, disk usage, and process monitoring
+                            </div>
+                        </div>
+                        <div style="padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 8px;">🔄</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Auto-Refresh</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                Live updates every 30 seconds (toggleable)
+                            </div>
+                        </div>
+                        <div style="padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Search & Filter</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                Quickly find agents, departments, or jobs
+                            </div>
+                        </div>
+                        <div style="padding: 16px; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 24px; margin-bottom: 8px;">📱</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Responsive Design</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                Works beautifully on desktop, tablet, and mobile
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🛠️ Tech Stack</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Frontend</div>
+                            <div style="color: var(--text-secondary);">Pure HTML5 + CSS3 + Vanilla JavaScript</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Styling</div>
+                            <div style="color: var(--text-secondary);">CSS Grid, Flexbox, Custom Properties</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Typography</div>
+                            <div style="color: var(--text-secondary);">Inter (Google Fonts)</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Data</div>
+                            <div style="color: var(--text-secondary);">Static JSON + Live API (future)</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Deployment</div>
+                            <div style="color: var(--text-secondary);">GitHub Pages compatible</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Size</div>
+                            <div style="color: var(--text-secondary);">&lt;150KB total (excl. fonts)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Principles -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>💡 Design Principles</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">🌙 Dark First</div>
+                            <div style="color: var(--text-secondary);">Designed for extended viewing sessions</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">⚡ Performance</div>
+                            <div style="color: var(--text-secondary);">No build step, minimal dependencies</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">🎨 Modern Aesthetic</div>
+                            <div style="color: var(--text-secondary);">Inspired by Vercel, Linear, Arc Browser</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">📊 Data Dense</div>
+                            <div style="color: var(--text-secondary);">Maximum information, minimal clutter</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">🔒 Privacy First</div>
+                            <div style="color: var(--text-secondary);">No tracking, no analytics, no cookies</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Team -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>👥 The Agentic World Team</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div style="text-align: center; padding: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 8px;">👨💼</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Sameer Goel</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">CEO / Founder</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 8px;">🔭</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Scout</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Chief of Staff</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 8px;">🔍</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Sherlock</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">R&D Lead</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 8px;">🎨</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Stark Lab</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Design Director</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 8px;">🛡️</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Sentinel</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Security Chief</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 8px;">🔥</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Phoenix</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">DR & Backups</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>🔗 Related Projects</h2>
+                </div>
+                <div class="card-content">
+                    <div class="quick-links">
+                        <a href="https://sameer-goel.github.io/smart-intel/" class="quick-link" target="_blank">
+                            <span>📊</span>
+                            <div>
+                                <div style="font-weight: 600;">Smart Intel</div>
+                                <div style="font-size: 12px; color: var(--text-tertiary);">Research intelligence hub</div>
+                            </div>
+                        </a>
+                        <a href="https://sameer-goel.github.io/web4agents/" class="quick-link" target="_blank">
+                            <span>🌐</span>
+                            <div>
+                                <div style="font-weight: 600;">Web4Agents</div>
+                                <div style="font-size: 12px; color: var(--text-tertiary);">Make any website agent-ready</div>
+                            </div>
+                        </a>
+                        <a href="https://sameer-goel.github.io/claw-dots/" class="quick-link" target="_blank">
+                            <span>🧩</span>
+                            <div>
+                                <div style="font-weight: 600;">Claw Dots</div>
+                                <div style="font-size: 12px; color: var(--text-tertiary);">Intelligence map visualization</div>
+                            </div>
+                        </a>
+                        <a href="https://github.com/sameer-goel/agentic-world" class="quick-link" target="_blank">
+                            <span>🐙</span>
+                            <div>
+                                <div style="font-weight: 600;">GitHub Repository</div>
+                                <div style="font-size: 12px; color: var(--text-tertiary);">Source code & documentation</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Version Info -->
+            <div class="card wide" style="text-align: center; padding: 32px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">🔭</div>
+                <div style="font-size: 24px; font-weight: 700; margin-bottom: 8px;">Scout Mission Control</div>
+                <div style="color: var(--text-secondary); margin-bottom: 16px;">Version 0.1.0</div>
+                <div style="font-size: 14px; color: var(--text-tertiary);">
+                    Built with ❤️ by the Agentic World team<br>
+                    Last updated: March 21, 2026
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function updateLastUpdated() {
+            const lastUpdatedEl = document.getElementById('lastUpdated');
+            if (lastUpdatedEl) {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                lastUpdatedEl.textContent = `Updated: ${timeString}`;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateLastUpdated);
+    </script>
+</body>
+</html>

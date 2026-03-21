@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Health - Scout Mission Control</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🔭</span>
+            <span class="logo-text">Scout Control</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><span>📊</span> Overview</a></li>
+            <li><a href="agents.html"><span>🤖</span> Agents</a></li>
+            <li><a href="cron.html"><span>⏰</span> Cron Jobs</a></li>
+            <li class="active"><a href="system.html"><span>🖥️</span> System</a></li>
+            <li><a href="about.html"><span>ℹ️</span> About</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span>All Systems Operational</span>
+            </div>
+            <div class="last-updated" id="lastUpdated">Updated: --</div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1>🖥️ System Health</h1>
+                <p>Infrastructure metrics and resource utilization</p>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Resource Stats -->
+            <div class="card stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="cpuUsage">45%</div>
+                    <div class="stat-label">CPU Usage</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">🧠</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="memUsage">78%</div>
+                    <div class="stat-label">Memory Usage</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">💾</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="diskUsage">93%</div>
+                    <div class="stat-label">Disk Usage</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="uptime">12d 5h</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+            </div>
+
+            <!-- Resource Meters -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>📊 Resource Utilization</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 500;">CPU</span>
+                                <span style="color: var(--text-secondary);">45%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%; background: var(--accent-blue);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 500;">Memory</span>
+                                <span style="color: var(--text-secondary);">78%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%; background: var(--accent-yellow);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 500;">Disk</span>
+                                <span style="color: var(--accent-red);">93%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 93%; background: var(--accent-red);"></div>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 13px; color: var(--accent-red);">
+                                ⚠️ Disk usage is high. Consider cleanup.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Running Processes -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>⚙️ Key Processes</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div class="health-item">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; margin-bottom: 4px;">openclaw-gateway</div>
+                                <div style="font-size: 13px; color: var(--text-secondary);">
+                                    CPU: 12% | Memory: 256 MB
+                                </div>
+                            </div>
+                            <span class="status-dot active"></span>
+                        </div>
+                        <div class="health-item">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; margin-bottom: 4px;">node</div>
+                                <div style="font-size: 13px; color: var(--text-secondary);">
+                                    CPU: 8% | Memory: 512 MB
+                                </div>
+                            </div>
+                            <span class="status-dot active"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Infrastructure Info -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🏗️ Infrastructure</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px;">
+                        <div>
+                            <div style="color: var(--text-tertiary); font-size: 11px; text-transform: uppercase; margin-bottom: 4px;">Host</div>
+                            <div>ip-10-0-1-222 (EC2 c7g.large)</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-tertiary); font-size: 11px; text-transform: uppercase; margin-bottom: 4px;">OS</div>
+                            <div>Linux 6.17.0-1009-aws (arm64)</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-tertiary); font-size: 11px; text-transform: uppercase; margin-bottom: 4px;">Node</div>
+                            <div>v22.22.1</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-tertiary); font-size: 11px; text-transform: uppercase; margin-bottom: 4px;">Region</div>
+                            <div>AWS EU Central (Frankfurt)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🧩 Installed Skills</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span>agent-browser</span>
+                            <span style="color: var(--text-tertiary);">automation</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span>clawdtalk-client</span>
+                            <span style="color: var(--text-tertiary);">communication</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span>frontend-design-pro</span>
+                            <span style="color: var(--text-tertiary);">design</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span>mission-control</span>
+                            <span style="color: var(--text-tertiary);">monitoring</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span>obsidian-cli</span>
+                            <span style="color: var(--text-tertiary);">productivity</span>
+                        </div>
+                        <div style="margin-top: 8px; text-align: center; color: var(--text-tertiary);">
+                            + 4 more skills
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🔧 Active Tools</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span class="status-dot active"></span>
+                            <span>OpenClaw Runtime</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span class="status-dot active"></span>
+                            <span>GitHub</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span class="status-dot active"></span>
+                            <span>Google Drive</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span class="status-dot active"></span>
+                            <span>Tailscale VPN</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--bg-secondary); border-radius: 6px;">
+                            <span class="status-dot active"></span>
+                            <span>Neon PostgreSQL</span>
+                        </div>
+                        <div style="margin-top: 8px; text-align: center; color: var(--text-tertiary);">
+                            + 3 more tools
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script>
+        function updateLastUpdated() {
+            const lastUpdatedEl = document.getElementById('lastUpdated');
+            if (lastUpdatedEl) {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                lastUpdatedEl.textContent = `Updated: ${timeString}`;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateLastUpdated);
+    </script>
+</body>
+</html>

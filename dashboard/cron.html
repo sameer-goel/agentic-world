@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cron Jobs - Scout Mission Control</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🔭</span>
+            <span class="logo-text">Scout Control</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><span>📊</span> Overview</a></li>
+            <li><a href="agents.html"><span>🤖</span> Agents</a></li>
+            <li class="active"><a href="cron.html"><span>⏰</span> Cron Jobs</a></li>
+            <li><a href="system.html"><span>🖥️</span> System</a></li>
+            <li><a href="about.html"><span>ℹ️</span> About</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span>All Systems Operational</span>
+            </div>
+            <div class="last-updated" id="lastUpdated">Updated: --</div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1>⏰ Scheduled Tasks</h1>
+                <p>Automated jobs and their execution schedules</p>
+            </div>
+            <div class="header-actions">
+                <span style="font-size: 14px; color: var(--text-secondary);">
+                    <span id="activeJobsCount">--</span> active jobs
+                </span>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Cron Stats -->
+            <div class="card stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="activeJobs">--</div>
+                    <div class="stat-label">Active Jobs</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="dailyJobs">--</div>
+                    <div class="stat-label">Daily Runs</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">🕐</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="nextJob">--</div>
+                    <div class="stat-label">Next Job In</div>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="lastRun">--</div>
+                    <div class="stat-label">Last Run</div>
+                </div>
+            </div>
+
+            <!-- Job List -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>All Scheduled Jobs</h2>
+                </div>
+                <div class="card-content">
+                    <div id="cronJobsList" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cron Schedule Legend -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>📖 Cron Schedule Reference</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">Format</div>
+                            <code style="background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; display: block; font-size: 13px;">
+                                * * * * *<br>
+                                │ │ │ │ │<br>
+                                │ │ │ │ └─ Day of week (0-6)<br>
+                                │ │ │ └─── Month (1-12)<br>
+                                │ │ └───── Day of month (1-31)<br>
+                                │ └─────── Hour (0-23)<br>
+                                └───────── Minute (0-59)
+                            </code>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 8px;">Common Patterns</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">
+                                <div style="margin-bottom: 4px;"><code>0 */2 * * *</code> - Every 2 hours</div>
+                                <div style="margin-bottom: 4px;"><code>0 */6 * * *</code> - Every 6 hours</div>
+                                <div style="margin-bottom: 4px;"><code>0 6,18 * * *</code> - 6 AM & 6 PM</div>
+                                <div style="margin-bottom: 4px;"><code>0 8 * * *</code> - Daily at 8 AM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="cron-page.js"></script>
+</body>
+</html>
