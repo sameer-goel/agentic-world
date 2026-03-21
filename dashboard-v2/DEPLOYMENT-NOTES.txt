@@ -1,0 +1,37 @@
+Dashboard v2 - Deployment Notes
+================================
+
+FILE CREATED: /workspace/agentic-world/dashboard-v2/index.html
+SIZE: 18KB
+STATUS: Ready for deployment
+
+REAL DATA IMPLEMENTED:
+✅ 6 Agents (Scout, Sentinel, Phoenix, Infra, CVE Watcher, Watson)
+✅ Agent status cards with correct roles, models, uptimes
+✅ System health metrics (CPU 23%, RAM 70%, Disk 61%)
+✅ Instance info (c7g.large, 2 vCPU, 4GB RAM, Graviton3)
+✅ 5 key cron jobs
+✅ Agent hierarchy tree (Scout as root)
+✅ Quick stats (6 agents, 15 cron jobs, 14d uptime, $4.23 cost)
+
+TECHNOLOGY STACK:
+✅ TailwindCSS (via CDN)
+✅ Alpine.js (via CDN)
+✅ Inter font (Google Fonts)
+✅ Dark theme
+✅ Mobile-responsive
+✅ Tab navigation (Agents, System Health, Cron Jobs, Hierarchy)
+
+GIT COMMANDS TO RUN (from host):
+cd ~/.openclaw/workspace/agentic-world
+git add dashboard-v2/
+git commit -m "feat: Add Mission Control v2 dashboard with real agent data"
+git push origin main
+
+VERIFY DEPLOYMENT:
+https://sameer-goel.github.io/agentic-world/dashboard-v2/
+
+NOTE: GitHub Pages must be enabled for the repo if not already.
+Check: Repository Settings > Pages > Source = main branch
+
+Created by: Subagent (2026-03-21)

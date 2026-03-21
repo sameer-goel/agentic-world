@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scout Mission Control v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100" x-data="dashboard()">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-10">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-3xl">🔭</span>
+                        <div>
+                            <h1 class="text-xl font-bold">Scout Mission Control</h1>
+                            <p class="text-sm text-gray-400">Real-time Agent Operations Dashboard</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-gray-400">
+                            <span x-text="currentTime"></span>
+                        </div>
+                        <button @click="refreshData" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container mx-auto px-4 py-6">
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Active Agents</p>
+                            <p class="text-3xl font-bold mt-1">6</p>
+                        </div>
+                        <div class="text-4xl">🤖</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Cron Jobs</p>
+                            <p class="text-3xl font-bold mt-1">15</p>
+                        </div>
+                        <div class="text-4xl">⏰</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Uptime</p>
+                            <p class="text-3xl font-bold mt-1">14d</p>
+                        </div>
+                        <div class="text-4xl">⏱️</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Cost Today</p>
+                            <p class="text-3xl font-bold mt-1">$4.23</p>
+                        </div>
+                        <div class="text-4xl">💰</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="bg-gray-800 rounded-lg border border-gray-700 mb-6">
+                <div class="flex border-b border-gray-700 overflow-x-auto">
+                    <button @click="currentTab = 'agents'" 
+                            :class="currentTab === 'agents' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white'"
+                            class="px-6 py-3 font-medium transition whitespace-nowrap">
+                        🤖 Agents
+                    </button>
+                    <button @click="currentTab = 'system'" 
+                            :class="currentTab === 'system' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white'"
+                            class="px-6 py-3 font-medium transition whitespace-nowrap">
+                        🖥️ System Health
+                    </button>
+                    <button @click="currentTab = 'cron'" 
+                            :class="currentTab === 'cron' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white'"
+                            class="px-6 py-3 font-medium transition whitespace-nowrap">
+                        ⏰ Cron Jobs
+                    </button>
+                    <button @click="currentTab = 'hierarchy'" 
+                            :class="currentTab === 'hierarchy' ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white'"
+                            class="px-6 py-3 font-medium transition whitespace-nowrap">
+                        🌳 Hierarchy
+                    </button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="p-6">
+                    <!-- Agents Tab -->
+                    <div x-show="currentTab === 'agents'" class="space-y-4">
+                        <template x-for="agent in agents" :key="agent.name">
+                            <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                                <div class="flex items-start justify-between flex-wrap gap-3">
+                                    <div class="flex items-start space-x-4">
+                                        <div class="text-4xl" x-text="agent.icon"></div>
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 flex-wrap">
+                                                <h3 class="text-lg font-bold" x-text="agent.name"></h3>
+                                                <span :class="{
+                                                    'bg-green-600': agent.status === 'Active',
+                                                    'bg-yellow-600': agent.status === 'Idle',
+                                                    'bg-blue-600': agent.status === 'On-demand'
+                                                }" class="px-2 py-1 rounded text-xs font-medium" x-text="agent.status"></span>
+                                            </div>
+                                            <p class="text-gray-400 text-sm mt-1" x-text="agent.role"></p>
+                                            <div class="flex flex-wrap gap-2 mt-3">
+                                                <span class="bg-gray-800 px-2 py-1 rounded text-xs">
+                                                    <span class="text-gray-400">Model:</span> 
+                                                    <span class="text-white font-medium" x-text="agent.model"></span>
+                                                </span>
+                                                <span x-show="agent.uptime" class="bg-gray-800 px-2 py-1 rounded text-xs">
+                                                    <span class="text-gray-400">Uptime:</span> 
+                                                    <span class="text-white font-medium" x-text="agent.uptime"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- System Health Tab -->
+                    <div x-show="currentTab === 'system'" class="space-y-4">
+                        <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                            <h3 class="font-bold mb-4">Instance Information</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Instance Type:</span>
+                                    <span class="font-medium">c7g.large</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">CPU:</span>
+                                    <span class="font-medium">2 vCPU (Graviton3)</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Memory:</span>
+                                    <span class="font-medium">4GB RAM</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Uptime:</span>
+                                    <span class="font-medium">14d 3h 27m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- CPU -->
+                            <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium">CPU Usage</span>
+                                    <span class="text-green-400 font-bold">23%</span>
+                                </div>
+                                <div class="w-full bg-gray-600 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 23%"></div>
+                                </div>
+                            </div>
+
+                            <!-- RAM -->
+                            <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium">RAM Usage</span>
+                                    <span class="text-yellow-400 font-bold">70% (2.8/4GB)</span>
+                                </div>
+                                <div class="w-full bg-gray-600 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Disk -->
+                            <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium">Disk Usage</span>
+                                    <span class="text-green-400 font-bold">61% (12/20GB)</span>
+                                </div>
+                                <div class="w-full bg-gray-600 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 61%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cron Jobs Tab -->
+                    <div x-show="currentTab === 'cron'" class="space-y-3">
+                        <template x-for="job in cronJobs" :key="job.name">
+                            <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                                <div class="flex items-start justify-between flex-wrap gap-2">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium" x-text="job.name"></h4>
+                                        <p class="text-sm text-gray-400 mt-1" x-text="job.schedule"></p>
+                                    </div>
+                                    <span class="bg-green-600 px-2 py-1 rounded text-xs font-medium">Active</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Hierarchy Tab -->
+                    <div x-show="currentTab === 'hierarchy'">
+                        <div class="bg-gray-700 rounded-lg p-6 border border-gray-600">
+                            <h3 class="font-bold mb-4">Agent Organization Structure</h3>
+                            <div class="space-y-2 text-sm overflow-x-auto">
+                                <div class="font-mono">🔭 <span class="font-bold text-blue-400">Scout</span> <span class="text-gray-400">(Chief of Staff)</span></div>
+                                <div class="font-mono ml-6">├── 🛡️ <span class="font-medium">Sentinel</span> <span class="text-gray-400">(Security Officer)</span></div>
+                                <div class="font-mono ml-6">├── 🔥 <span class="font-medium">Phoenix</span> <span class="text-gray-400">(DR & Backup)</span></div>
+                                <div class="font-mono ml-6">├── 🖥️ <span class="font-medium">Infra</span> <span class="text-gray-400">(Infrastructure)</span></div>
+                                <div class="font-mono ml-6">├── 🔔 <span class="font-medium">CVE Watcher</span> <span class="text-gray-400">(Security Monitor)</span></div>
+                                <div class="font-mono ml-6">└── 💰 <span class="font-medium">Watson</span> <span class="text-gray-400">(Financial Analyst)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function dashboard() {
+            return {
+                currentTab: 'agents',
+                currentTime: '',
+                agents: [
+                    {
+                        name: 'Scout',
+                        icon: '🔭',
+                        role: 'Chief of Staff',
+                        status: 'Active',
+                        model: 'sonnet-4-5',
+                        uptime: '14d'
+                    },
+                    {
+                        name: 'Sentinel',
+                        icon: '🛡️',
+                        role: 'Security Officer',
+                        status: 'Active',
+                        model: 'haiku-4-5',
+                        uptime: '14d'
+                    },
+                    {
+                        name: 'Phoenix',
+                        icon: '🔥',
+                        role: 'DR & Backup',
+                        status: 'Idle',
+                        model: 'haiku-4-5',
+                        uptime: ''
+                    },
+                    {
+                        name: 'Infra',
+                        icon: '🖥️',
+                        role: 'Infrastructure',
+                        status: 'Active',
+                        model: 'OpenRouter free',
+                        uptime: ''
+                    },
+                    {
+                        name: 'CVE Watcher',
+                        icon: '🔔',
+                        role: 'Security Monitor',
+                        status: 'Active',
+                        model: 'OpenRouter free',
+                        uptime: ''
+                    },
+                    {
+                        name: 'Watson',
+                        icon: '💰',
+                        role: 'Financial Analyst',
+                        status: 'On-demand',
+                        model: 'haiku-4-5',
+                        uptime: ''
+                    }
+                ],
+                cronJobs: [
+                    { name: 'Daily Self-Improvement Review', schedule: '22:00 CET' },
+                    { name: 'Email Alert Monitor', schedule: 'Every 2 hours' },
+                    { name: 'Sentinel Security Audit', schedule: 'Every 6 hours' },
+                    { name: 'Phoenix DR Backup', schedule: 'Every 12 hours' },
+                    { name: 'CVE Watcher', schedule: 'Daily 06:00' }
+                ],
+                init() {
+                    this.updateTime();
+                    setInterval(() => this.updateTime(), 1000);
+                },
+                updateTime() {
+                    const now = new Date();
+                    this.currentTime = now.toLocaleString('en-US', { 
+                        timeZone: 'UTC',
+                        weekday: 'short',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    }) + ' UTC';
+                },
+                refreshData() {
+                    console.log('Dashboard refreshed');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
