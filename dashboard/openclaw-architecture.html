@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Architecture & Agent Ecosystem</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            gap: 2px;
+            background: #020617;
+        }
+        
+        .sidebar {
+            width: 320px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.3);
+        }
+        
+        .main-canvas {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+        }
+        
+        #graph {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .sidebar h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar h2 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 6px;
+        }
+        
+        .component-list {
+            list-style: none;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+        
+        .component-list li {
+            padding: 4px 0;
+            color: #cbd5e1;
+            border-left: 2px solid transparent;
+            padding-left: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .component-list li:hover {
+            color: #00d9ff;
+            border-left-color: #00d9ff;
+            background: rgba(0, 217, 255, 0.05);
+            padding-left: 12px;
+        }
+        
+        .badge {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 4px;
+            font-weight: 600;
+        }
+        
+        .badge.gateway { background: #06b6d4; color: #020617; }
+        .badge.agent { background: #8b5cf6; color: #020617; }
+        .badge.channel { background: #10b981; color: #020617; }
+        .badge.storage { background: #f59e0b; color: #020617; }
+        .badge.tool { background: #ec4899; color: #020617; }
+        
+        .legend {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 11px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        
+        .legend-color {
+            width: 24px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .sidebar-group {
+            margin-bottom: 16px;
+        }
+        
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            max-width: 280px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .info-panel strong {
+            color: #00d9ff;
+        }
+        
+        .controls {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            flex-wrap: wrap;
+            max-width: 300px;
+        }
+        
+        .controls button {
+            background: #334155;
+            color: #e2e8f0;
+            border: 1px solid #475569;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .controls button:hover {
+            background: #00d9ff;
+            color: #020617;
+            border-color: #00d9ff;
+        }
+        
+        .controls button.active {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+        
+        .title-bar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+        
+        .title-bar h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-bottom: 4px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+        
+        .title-bar p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-left: 2px;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div style="margin-bottom: 20px;">
+                <h1>📋 Components</h1>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #06b6d4;"></div>
+                    <span>Gateway Core</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #8b5cf6;"></div>
+                    <span>Agent/Session</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #10b981;"></div>
+                    <span>Channel/UI</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f59e0b;"></div>
+                    <span>Storage/Data</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ec4899;"></div>
+                    <span>Tools/Skills</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-group">
+                <h2>🌐 Gateway Core</h2>
+                <ul class="component-list">
+                    <li>OpenClaw Gateway <span class="badge gateway">CORE</span></li>
+                    <li>Session Manager</li>
+                    <li>Channel Router</li>
+                    <li>Message Queue</li>
+                    <li>WebSocket Server</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-group">
+                <h2>💬 Channels (Input/Output)</h2>
+                <ul class="component-list">
+                    <li>WhatsApp</li>
+                    <li>Discord</li>
+                    <li>Telegram</li>
+                    <li>Slack</li>
+                    <li>Signal</li>
+                    <li>iMessage</li>
+                    <li>WebChat</li>
+                    <li>Matrix/Teams</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-group">
+                <h2>🤖 Agents & Sessions</h2>
+                <ul class="component-list">
+                    <li>Scout (Main) <span class="badge agent">PRIMARY</span></li>
+                    <li>Sherlock (Investigator)</li>
+                    <li>Infra Chief</li>
+                    <li>Sentinel (Security)</li>
+                    <li>Phoenix (DR)</li>
+                    <li>SamuraiChi (Secondary)</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-group">
+                <h2>🔧 Tools & Skills</h2>
+                <ul class="component-list">
+                    <li>Browser Control</li>
+                    <li>GitHub CLI</li>
+                    <li>Email (Himalaya)</li>
+                    <li>Cron Jobs</li>
+                    <li>Voice (TTS/STT)</li>
+                    <li>Web Search</li>
+                    <li>File I/O</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-group">
+                <h2>💾 Storage & Config</h2>
+                <ul class="component-list">
+                    <li>MEMORY.md (LTM)</li>
+                    <li>Daily logs</li>
+                    <li>openclaw.json</li>
+                    <li>Skills cache</li>
+                    <li>Session logs</li>
+                    <li>GitHub repos</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-group">
+                <h2>🎯 Pipelines</h2>
+                <ul class="component-list">
+                    <li>Smart Intel (30m)</li>
+                    <li>Game Dev (30m)</li>
+                    <li>Email Monitor (2h)</li>
+                    <li>Security Audit (6h)</li>
+                    <li>DR Backup (12h)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="main-canvas">
+            <div id="graph"></div>
+            <div class="title-bar">
+                <h1>🔭 OpenClaw Architecture</h1>
+                <p>Agent ecosystem, data flow & operational structure</p>
+            </div>
+            <div class="controls">
+                <button onclick="fitToScreen()">📍 Fit</button>
+                <button onclick="togglePhysics()">⚡ Physics</button>
+                <button onclick="resetZoom()">🔄 Reset</button>
+                <button onclick="exportPNG()">📸 Export</button>
+            </div>
+            <div class="info-panel" id="infoPanel">
+                <strong>OpenClaw</strong><br/>
+                Self-hosted AI gateway with multi-channel routing, agent isolation, and tool integration.<br/><br/>
+                <strong>Click nodes</strong> to highlight connections
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create nodes
+        const nodes = new vis.DataSet([
+            // Core Gateway
+            { id: 'gateway', label: 'OpenClaw\nGateway', color: '#06b6d4', size: 40, font: { size: 12, bold: true }, title: 'Core gateway process - message routing & session management' },
+            
+            // Session Management
+            { id: 'sessions', label: 'Session\nManager', color: '#8b5cf6', size: 30, font: { size: 11 }, title: 'Manages isolated agent sessions per sender/workspace' },
+            { id: 'router', label: 'Channel\nRouter', color: '#06b6d4', size: 28, font: { size: 10 }, title: 'Routes messages between channels' },
+            { id: 'msgqueue', label: 'Message\nQueue', color: '#06b6d4', size: 26, font: { size: 10 }, title: 'Buffers inbound/outbound messages' },
+            
+            // Channels In
+            { id: 'whatsapp', label: 'WhatsApp', color: '#10b981', size: 24, font: { size: 10 }, title: 'Primary comms' },
+            { id: 'discord', label: 'Discord', color: '#10b981', size: 24, font: { size: 10 }, title: 'Team coordination' },
+            { id: 'telegram', label: 'Telegram', color: '#10b981', size: 24, font: { size: 10 }, title: 'Alerts & monitoring' },
+            { id: 'slack', label: 'Slack', color: '#10b981', size: 22, font: { size: 9 } },
+            { id: 'signal', label: 'Signal', color: '#10b981', size: 22, font: { size: 9 } },
+            { id: 'webchat', label: 'WebChat', color: '#10b981', size: 22, font: { size: 9 } },
+            
+            // Primary Agents
+            { id: 'scout', label: '🔭 Scout\n(Main)', color: '#8b5cf6', size: 38, font: { size: 12, bold: true }, title: 'Chief of Staff - R&D advisor & intelligence ops' },
+            { id: 'sherlock', label: '🔍 Sherlock\n(Investigator)', color: '#8b5cf6', size: 28, font: { size: 10 }, title: 'Research & pattern detection' },
+            { id: 'infra', label: '🖥️ Infra\n(Chief)', color: '#8b5cf6', size: 26, font: { size: 9 }, title: 'Disk/infrastructure monitoring' },
+            
+            // Support Agents
+            { id: 'sentinel', label: '🛡️ Sentinel\n(Security)', color: '#8b5cf6', size: 24, font: { size: 9 }, title: 'Security audits (6h cron)' },
+            { id: 'phoenix', label: '🔥 Phoenix\n(DR)', color: '#8b5cf6', size: 24, font: { size: 9 }, title: 'Backup & recovery (12h cron)' },
+            { id: 'samuraichi', label: '🤓 SamuraiChi\n(Secondary)', color: '#8b5cf6', size: 24, font: { size: 9 }, title: 'Mac Docker - DR standby' },
+            
+            // Tools & Libraries
+            { id: 'browser', label: 'Browser\nControl', color: '#ec4899', size: 22, font: { size: 9 }, title: 'Playwright/Chromium automation' },
+            { id: 'github', label: 'GitHub\nCLI', color: '#ec4899', size: 22, font: { size: 9 }, title: 'PR, issue, and repo ops' },
+            { id: 'email', label: 'Email\n(Himalaya)', color: '#ec4899', size: 22, font: { size: 9 }, title: 'IMAP/SMTP via himalaya' },
+            { id: 'cron', label: 'Cron\nJobs', color: '#ec4899', size: 22, font: { size: 9 }, title: 'Scheduled agent runs' },
+            { id: 'voice', label: 'Voice\nTTS/STT', color: '#ec4899', size: 22, font: { size: 9 }, title: 'edge-tts, faster-whisper' },
+            { id: 'search', label: 'Web\nSearch', color: '#ec4899', size: 20, font: { size: 9 }, title: 'Brave/SearXNG API' },
+            { id: 'file', label: 'File\nI/O', color: '#ec4899', size: 20, font: { size: 9 }, title: 'read/write/edit tools' },
+            
+            // Storage
+            { id: 'memory', label: 'MEMORY.md\n(LTM)', color: '#f59e0b', size: 24, font: { size: 9 }, title: 'Long-term memory' },
+            { id: 'dailylog', label: 'Daily Logs\nmemory/', color: '#f59e0b', size: 22, font: { size: 9 }, title: 'Session records' },
+            { id: 'config', label: 'Config\n(openclaw.json)', color: '#f59e0b', size: 22, font: { size: 9 }, title: 'Models, channels, auth' },
+            { id: 'repos', label: 'GitHub\nRepos', color: '#f59e0b', size: 22, font: { size: 9 }, title: '11 git repos' },
+            { id: 'skills', label: 'Skills\nCache', color: '#f59e0b', size: 20, font: { size: 9 }, title: '15+ installed skills' },
+            
+            // Models
+            { id: 'bedrock', label: 'Bedrock\nModels', color: '#06b6d4', size: 24, font: { size: 9 }, title: 'Opus/Sonnet/Haiku' },
+            { id: 'openrouter', label: 'OpenRouter\n(Free)', color: '#06b6d4', size: 22, font: { size: 9 }, title: 'Fallback free models' },
+            
+            // Pipelines
+            { id: 'smartintel', label: '📊 Smart Intel\n(30m)', color: '#ec4899', size: 22, font: { size: 9 }, title: 'Research auto-publish' },
+            { id: 'gamedev', label: '🎮 Game Dev\n(30m)', color: '#ec4899', size: 22, font: { size: 9 }, title: 'Gamified learning' },
+            { id: 'emailmon', label: '📧 Email\nMonitor (2h)', color: '#ec4899', size: 20, font: { size: 9 }, title: 'Inbox watch' },
+        ]);
+
+        // Create edges
+        const edges = new vis.DataSet([
+            // Gateway -> Sessions & Routing
+            { from: 'gateway', to: 'sessions', arrows: 'to;from', color: { color: '#475569' }, smooth: { type: 'curvedCW' } },
+            { from: 'gateway', to: 'router', arrows: 'to;from', color: { color: '#475569' }, smooth: { type: 'curvedCCW' } },
+            { from: 'gateway', to: 'msgqueue', arrows: 'to;from', color: { color: '#475569' }, smooth: { type: 'curvedCW' } },
+            
+            // Channels -> Router
+            { from: 'whatsapp', to: 'router', arrows: 'to', color: { color: '#10b981' }, width: 2 },
+            { from: 'discord', to: 'router', arrows: 'to', color: { color: '#10b981' }, width: 1.5 },
+            { from: 'telegram', to: 'router', arrows: 'to', color: { color: '#10b981' }, width: 1.5 },
+            { from: 'slack', to: 'router', arrows: 'to', color: { color: '#10b981' } },
+            { from: 'signal', to: 'router', arrows: 'to', color: { color: '#10b981' } },
+            { from: 'webchat', to: 'router', arrows: 'to', color: { color: '#10b981' } },
+            
+            // Router -> Queue -> Sessions
+            { from: 'router', to: 'msgqueue', arrows: 'to', color: { color: '#475569' } },
+            { from: 'msgqueue', to: 'sessions', arrows: 'to', color: { color: '#475569' } },
+            
+            // Sessions -> Agents
+            { from: 'sessions', to: 'scout', arrows: 'to;from', color: { color: '#8b5cf6' }, width: 2.5, smooth: { type: 'curvedCW' } },
+            { from: 'sessions', to: 'sherlock', arrows: 'to;from', color: { color: '#8b5cf6' }, width: 1.5 },
+            { from: 'sessions', to: 'infra', arrows: 'to;from', color: { color: '#8b5cf6' }, width: 1.5 },
+            { from: 'sessions', to: 'sentinel', arrows: 'to', color: { color: '#8b5cf6' } },
+            { from: 'sessions', to: 'phoenix', arrows: 'to', color: { color: '#8b5cf6' } },
+            { from: 'sessions', to: 'samuraichi', arrows: 'to', color: { color: '#8b5cf6' }, smooth: { type: 'curvedCW' } },
+            
+            // Agents -> Tools
+            { from: 'scout', to: 'browser', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'scout', to: 'github', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'scout', to: 'search', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'scout', to: 'file', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'scout', to: 'voice', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'sherlock', to: 'browser', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'sherlock', to: 'search', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'infra', to: 'file', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'sentinel', to: 'file', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'phoenix', to: 'github', arrows: 'to', color: { color: '#ec4899' } },
+            
+            // Agents -> Storage
+            { from: 'scout', to: 'memory', arrows: 'to;from', color: { color: '#f59e0b' }, width: 2 },
+            { from: 'scout', to: 'dailylog', arrows: 'to;from', color: { color: '#f59e0b' } },
+            { from: 'sherlock', to: 'memory', arrows: 'to;from', color: { color: '#f59e0b' } },
+            { from: 'infra', to: 'dailylog', arrows: 'to', color: { color: '#f59e0b' } },
+            { from: 'sentinel', to: 'dailylog', arrows: 'to', color: { color: '#f59e0b' } },
+            
+            // Config -> Agents
+            { from: 'config', to: 'gateway', arrows: 'to', color: { color: '#475569' } },
+            { from: 'skills', to: 'scout', arrows: 'to', color: { color: '#475569' } },
+            { from: 'repos', to: 'scout', arrows: 'to;from', color: { color: '#475569' } },
+            
+            // Models -> Gateway
+            { from: 'gateway', to: 'bedrock', arrows: 'to;from', color: { color: '#06b6d4' }, width: 2 },
+            { from: 'gateway', to: 'openrouter', arrows: 'to;from', color: { color: '#06b6d4' } },
+            
+            // Pipelines -> Agents
+            { from: 'smartintel', to: 'scout', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'gamedev', to: 'scout', arrows: 'to', color: { color: '#ec4899' } },
+            { from: 'emailmon', to: 'scout', arrows: 'to', color: { color: '#ec4899' } },
+            
+            // Channels <- Agents (response flow)
+            { from: 'scout', to: 'whatsapp', arrows: 'to', color: { color: '#10b981' }, style: 'dashed' },
+            { from: 'scout', to: 'discord', arrows: 'to', color: { color: '#10b981' }, style: 'dashed' },
+            { from: 'scout', to: 'telegram', arrows: 'to', color: { color: '#10b981' }, style: 'dashed' },
+        ]);
+
+        // Create network
+        const container = document.getElementById('graph');
+        const data = { nodes, edges };
+        const options = {
+            physics: {
+                enabled: true,
+                barnesHut: {
+                    gravitationalConstant: -15000,
+                    centralGravity: 0.3,
+                    springLength: 200,
+                    springConstant: 0.04
+                },
+                solver: 'barnesHut',
+                timestep: 0.35,
+                stabilization: {
+                    iterations: 200,
+                    fit: true
+                }
+            },
+            nodes: {
+                shape: 'dot',
+                margin: 10,
+                widthConstraint: { maximum: 120 },
+                font: {
+                    face: 'Inter, sans-serif',
+                    color: '#e2e8f0',
+                    size: 12,
+                    strokeWidth: 2,
+                    strokeColor: '#0f172a'
+                }
+            },
+            edges: {
+                arrows: {
+                    to: { enabled: true, scaleFactor: 0.5 }
+                },
+                color: { color: '#475569', highlight: '#00d9ff' },
+                smooth: { type: 'continuous' },
+                font: { size: 10, face: 'Inter, sans-serif' },
+                hoverWidth: 2
+            },
+            interaction: {
+                hover: true,
+                navigationButtons: false,
+                keyboard: false,
+                zoomView: true,
+                dragView: true
+            }
+        };
+
+        const network = new vis.Network(container, data, options);
+
+        // Info panel updates on node click
+        network.on('click', function(params) {
+            if (params.nodes.length > 0) {
+                const nodeId = params.nodes[0];
+                const node = nodes.get(nodeId);
+                const infoPanel = document.getElementById('infoPanel');
+                infoPanel.innerHTML = `<strong>${node.label}</strong><br/>${node.title || 'OpenClaw component'}`;
+                
+                // Highlight connected nodes
+                network.selectNodes([nodeId]);
+            }
+        });
+
+        // Controls
+        function fitToScreen() {
+            network.fit();
+        }
+
+        let physicsEnabled = true;
+        function togglePhysics() {
+            physicsEnabled = !physicsEnabled;
+            network.physics.enabled = physicsEnabled;
+        }
+
+        function resetZoom() {
+            network.fit();
+            network.selectNodes([]);
+        }
+
+        function exportPNG() {
+            const canvas = document.querySelector('canvas');
+            const image = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = 'openclaw-architecture.png';
+            link.click();
+        }
+
+        // Initial fit
+        setTimeout(() => network.fit(), 500);
+    </script>
+</body>
+</html>
